@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AccountDropdown } from "./account-dropdown";
 import { SearchInput } from "./SearchInput";
-import { AccountCTACard } from "./AccountCTACard";
 import { SideNav } from "./SideNav";
 import { MainSectionLayout } from "./MainSectionLayout";
+import { FaucetCard } from "./FaucetCard";
 
 export function Dashboard() {
   return (
@@ -30,7 +30,7 @@ export function Dashboard() {
             <SideNav />
           </div>
           <div className="mt-auto p-4">
-            <AccountCTACard />
+            <FaucetCard />
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ export function Dashboard() {
             <SheetContent side="left" className="flex flex-col">
               <SideNav />
               <div className="mt-auto">
-                <AccountCTACard />
+                <FaucetCard />
               </div>
             </SheetContent>
           </Sheet>
