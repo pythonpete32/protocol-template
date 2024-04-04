@@ -27,7 +27,7 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^2.9.9",
+    "viem": "^2.7.6",
     "wagmi": "^2.5.18"
   },
   "devDependencies": {
