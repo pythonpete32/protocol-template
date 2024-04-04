@@ -1,16 +1,8 @@
 "use client";
+import { menuItems } from "@/config/navigation";
 import { useState } from "react";
-import { Home, LineChart, Package, ShoppingCart, Users } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-
-const menuItems = [
-  { href: "#", icon: Home, label: "Dashboard" },
-  { href: "#", icon: ShoppingCart, label: "Orders", badge: 6 },
-  { href: "#", icon: Package, label: "Products" },
-  { href: "#", icon: Users, label: "Customers" },
-  { href: "#", icon: LineChart, label: "Analytics" },
-];
 
 export function SideNav() {
   const [activeItem, setActiveItem] = useState("Dashboard");
@@ -38,3 +30,4 @@ export function SideNav() {
     </nav>
   );
 }
+
