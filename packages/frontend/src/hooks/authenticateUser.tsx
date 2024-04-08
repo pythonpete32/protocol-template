@@ -1,6 +1,6 @@
 import { createMultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { AlchemySigner } from "@alchemy/aa-alchemy";
-import { arbitrumSepolia, createBundlerClient } from "@alchemy/aa-core";
+import { sepolia, createBundlerClient } from "@alchemy/aa-core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
@@ -25,17 +25,20 @@ export const useAuthenticateUser = (signer: AlchemySigner | undefined) => {
     });
 
     const publicClient = createBundlerClient({
-      chain: arbitrumSepolia,
+      chain: sepolia,
       transport: http("/api/rpc"),
     });
 
+    console.log("FIRST", { signer, user });
     const account = user
       ? await createMultiOwnerModularAccount({
           transport: custom(publicClient),
-          chain: arbitrumSepolia,
+          chain: sepolia,
           signer: signer!,
         })
       : undefined;
+
+    console.log("SECOND", { user, account, signer });
 
     return { user, account };
   }, [params, signer, router]);

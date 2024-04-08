@@ -9,16 +9,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { ConnectButton } from "./ConnectButton";
+import { useAuthenticateUser } from "@/hooks/authenticateUser";
+import { AlchemySigner } from "@alchemy/aa-alchemy";
+import { useState } from "react";
 
-export function AccountDropdown() {
-  // const isLoggedIn = useIsLoggedIn();
-  const isLoggedIn = false
-  // const { handleLogOut } = useDynamicContext();
+export function AccountDropdown({ signer }: { signer: AlchemySigner | undefined} ) {
+
+
+
+  
+  const { user, account } = useAuthenticateUser(signer);
+
+  console.log({ user, account });
+
+
+  const isLoggedIn = !!account
+
   const handleLogOut = () => {console.log('logout')}
 
-  if (!isLoggedIn) return <ConnectButton />;
+  if (!isLoggedIn) return <ConnectButton signer={signer}/>;
 
   return (
     <DropdownMenu>

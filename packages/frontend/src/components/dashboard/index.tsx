@@ -11,8 +11,29 @@ import { SideNav } from "./SideNav";
 import { MainSectionLayout } from "./MainSectionLayout";
 import { FaucetCard } from "./FaucetCard";
 import { TurnkeyIframe } from "./TurnkeyIframe";
+import { useAuthenticateUser } from "@/hooks/authenticateUser";
+import { AlchemySigner } from "@alchemy/aa-alchemy";
+import { useState } from "react";
 
 export function Dashboard() {
+  const [signer] = useState<AlchemySigner | undefined>(() => {
+    if (typeof window === "undefined") return undefined;
+
+    return new AlchemySigner({
+      client: {
+        connection: {
+          rpcUrl: "/api/rpc",
+        },
+        iframeConfig: {
+          iframeContainerId: "turnkey-iframe-container-id",
+        },
+      },
+    });
+  });
+
+  const { user, account } = useAuthenticateUser(signer);
+  console.log({ user, account });
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -58,7 +79,7 @@ export function Dashboard() {
           <div className="w-full flex-1">
             <SearchInput />
           </div>
-          <AccountDropdown />
+          <AccountDropdown signer={signer} />
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <MainSectionLayout title="Inventory" centered>

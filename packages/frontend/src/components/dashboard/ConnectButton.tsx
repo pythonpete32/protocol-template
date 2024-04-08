@@ -15,30 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
 import { AlchemySigner } from "@alchemy/aa-alchemy";
 
-export const ConnectButton: FC<{ className?: string }> = ({ className }) => {
-
-
-
-
-  const [signer] = useState<AlchemySigner | undefined>(() => {
-    if (typeof window === "undefined") return undefined;
-
-    return new AlchemySigner({
-      client: {
-        connection: {
-          rpcUrl: "/api/rpc",
-        },
-        iframeConfig: {
-          iframeContainerId: "turnkey-iframe-container-id",
-        },
-      },
-    });
-  });
-
-  const { user, account} =
-  useAuthenticateUser(signer);
-
-  console.log({  user, account });
+export const ConnectButton: FC<{ className?: string, signer: AlchemySigner | undefined }> = ({ className, signer }) => {
 
 
 
@@ -63,10 +40,8 @@ export function LoginForm({ signer }: { signer: AlchemySigner | undefined }) {
     []
   );
 
-  const { isAuthenticatingUser, authenticateUser, user, account} =
+  const { isAuthenticatingUser, authenticateUser } =
     useAuthenticateUser(signer);
-
-  console.log({ isAuthenticatingUser, authenticateUser, email, user, account });
 
   return (
     <>
