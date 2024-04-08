@@ -1,10 +1,47 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { DynamicEmbeddedWidget } from "@dynamic-labs/sdk-react-core";
-import { FC } from "react";
+import { FC, useCallback, useState } from "react";
 import { Dialog, DialogContentInvisible, DialogTrigger } from "../ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuthenticateUser } from "@/hooks/authenticateUser";
+import { AlchemySigner } from "@alchemy/aa-alchemy";
 
 export const ConnectButton: FC<{ className?: string }> = ({ className }) => {
+
+
+
+
+  const [signer] = useState<AlchemySigner | undefined>(() => {
+    if (typeof window === "undefined") return undefined;
+
+    return new AlchemySigner({
+      client: {
+        connection: {
+          rpcUrl: "/api/rpc",
+        },
+        iframeConfig: {
+          iframeContainerId: "turnkey-iframe-container-id",
+        },
+      },
+    });
+  });
+
+  const { user, account} =
+  useAuthenticateUser(signer);
+
+  console.log({  user, account });
+
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -13,8 +50,66 @@ export const ConnectButton: FC<{ className?: string }> = ({ className }) => {
         </Button>
       </DialogTrigger>
       <DialogContentInvisible>
-        <DynamicEmbeddedWidget background="default" />
+        <LoginForm signer={signer} />
       </DialogContentInvisible>
     </Dialog>
   );
 };
+
+export function LoginForm({ signer }: { signer: AlchemySigner | undefined }) {
+  const [email, setEmail] = useState<string>("");
+  const onEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+    []
+  );
+
+  const { isAuthenticatingUser, authenticateUser, user, account} =
+    useAuthenticateUser(signer);
+
+  console.log({ isAuthenticatingUser, authenticateUser, email, user, account });
+
+  return (
+    <>
+      {!isAuthenticatingUser ? (
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Log in to the Embedded Accounts Demo!
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                value={email}
+                onChange={onEmailChange}
+              />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button
+              className="w-full"
+              onClick={() => authenticateUser({ type: "email", email })}
+            >
+              Sign in
+            </Button>
+          </CardFooter>
+        </Card>
+      ) : (
+        <Card className="w-full max-w-sm">
+          <CardHeader></CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Check Email</Label>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </>
+  );
+}

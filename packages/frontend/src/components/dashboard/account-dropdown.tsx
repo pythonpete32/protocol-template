@@ -13,8 +13,10 @@ import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { ConnectButton } from "./ConnectButton";
 
 export function AccountDropdown() {
-  const isLoggedIn = useIsLoggedIn();
-  const { handleLogOut } = useDynamicContext();
+  // const isLoggedIn = useIsLoggedIn();
+  const isLoggedIn = false
+  // const { handleLogOut } = useDynamicContext();
+  const handleLogOut = () => {console.log('logout')}
 
   if (!isLoggedIn) return <ConnectButton />;
 

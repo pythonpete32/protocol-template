@@ -10,6 +10,7 @@ import { SearchInput } from "./SearchInput";
 import { SideNav } from "./SideNav";
 import { MainSectionLayout } from "./MainSectionLayout";
 import { FaucetCard } from "./FaucetCard";
+import { TurnkeyIframe } from "./TurnkeyIframe";
 
 export function Dashboard() {
   return (
@@ -71,6 +72,7 @@ export function Dashboard() {
           </MainSectionLayout>
         </main>
       </div>
+      <TurnkeyIframe/>
     </div>
   );
 }
