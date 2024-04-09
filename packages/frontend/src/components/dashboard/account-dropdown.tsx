@@ -12,23 +12,17 @@ import {
 import { ConnectButton } from "./ConnectButton";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
 import { AlchemySigner } from "@alchemy/aa-alchemy";
-import { useState } from "react";
 
-export function AccountDropdown({ signer }: { signer: AlchemySigner | undefined} ) {
+export function AccountDropdown({ signer }: { signer: AlchemySigner | undefined }) {
+  const { account } = useAuthenticateUser(signer);
 
+  const isLoggedIn = !!account;
 
+  const handleLogOut = () => {
+    console.log("logout");
+  };
 
-  
-  const { user, account } = useAuthenticateUser(signer);
-
-  console.log({ user, account });
-
-
-  const isLoggedIn = !!account
-
-  const handleLogOut = () => {console.log('logout')}
-
-  if (!isLoggedIn) return <ConnectButton signer={signer}/>;
+  if (!isLoggedIn) return <ConnectButton signer={signer} />;
 
   return (
     <DropdownMenu>
@@ -43,9 +37,7 @@ export function AccountDropdown({ signer }: { signer: AlchemySigner | undefined}
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleLogOut()}>
-          Logout
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLogOut()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

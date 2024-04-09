@@ -31,8 +31,8 @@ export function Dashboard() {
     });
   });
 
-  const { user, account } = useAuthenticateUser(signer);
-  console.log({ user, account });
+  // const { user, account } = useAuthenticateUser(signer);
+  // console.log({ user, account });
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -93,7 +93,7 @@ export function Dashboard() {
           </MainSectionLayout>
         </main>
       </div>
-      <TurnkeyIframe/>
+      <TurnkeyIframe />
     </div>
   );
 }

@@ -29,7 +29,6 @@ export const useAuthenticateUser = (signer: AlchemySigner | undefined) => {
       transport: http("/api/rpc"),
     });
 
-    console.log("FIRST", { signer, user });
     const account = user
       ? await createMultiOwnerModularAccount({
           transport: custom(publicClient),
@@ -38,16 +37,16 @@ export const useAuthenticateUser = (signer: AlchemySigner | undefined) => {
         })
       : undefined;
 
-    console.log("SECOND", { user, account, signer });
-
     return { user, account };
   }, [params, signer, router]);
 
-  const { mutate: authenticateUser, isPending: isAuthenticatingUser } =
-    useMutation({
-      mutationFn: signer?.authenticate,
-      onSuccess: authUser,
-    });
+  const { mutate: authenticateUser, isPending: isAuthenticatingUser } = useMutation({
+    mutationFn: signer?.authenticate,
+    onSuccess: authUser,
+    onSettled(data, error, variables, context) {
+      console.log("settled", { data, error, variables, context });
+    },
+  });
 
   const {
     data,
