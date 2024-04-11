@@ -11,18 +11,13 @@ import { SideNav } from "./SideNav";
 import { MainSectionLayout } from "./MainSectionLayout";
 import { FaucetCard } from "./FaucetCard";
 import { TurnkeyIframe } from "./TurnkeyIframe";
-import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { AlchemySmartAccountClient, User, createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
-import { FC, useCallback, useEffect, useState } from "react";
-import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
-import { Address, sepolia } from "@alchemy/aa-core";
+
+import { FC, useCallback } from "react";
+import { Address } from "@alchemy/aa-core";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount } from "../providers/account-context";
 
 export function Dashboard() {
-  const { user, account } = useAccount();
-  // const { user, account } = useAuthenticateUser();
-
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -68,7 +63,7 @@ export function Dashboard() {
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <MainSectionLayout title="Inventory" centered>
-            <TestView user={user} account={account} />
+            <TestView />
           </MainSectionLayout>
         </main>
       </div>
@@ -77,13 +72,8 @@ export function Dashboard() {
   );
 }
 
-type TestViewProps = {
-  user: User | undefined;
-  account: MultiOwnerModularAccount | undefined;
-};
-
-const TestView: FC<TestViewProps> = ({ user, account }) => {
-  const { provider } = useAccount();
+const TestView: FC = () => {
+  const { user, account, provider } = useAccount();
 
   const sendUO = useCallback(async () => {
     if (provider == null || account == null) return;
@@ -91,8 +81,7 @@ const TestView: FC<TestViewProps> = ({ user, account }) => {
     const vitalik: Address = "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B";
 
     const { hash } = await provider.sendUserOperation({
-      // account,
-      uo: { data: "0x00", target: vitalik, value: BigInt(420) },
+      uo: { data: "0x00", target: vitalik },
     });
 
     const txnHash = await provider.waitForUserOperationTransaction({
