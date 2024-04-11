@@ -12,8 +12,11 @@ import { MainSectionLayout } from "./MainSectionLayout";
 import { FaucetCard } from "./FaucetCard";
 import { TurnkeyIframe } from "./TurnkeyIframe";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
-import { useState } from "react";
+import { AlchemySigner, AlchemySmartAccountClient, User, createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { FC, useCallback, useEffect, useState } from "react";
+import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
+import { Address, sepolia } from "@alchemy/aa-core";
+import { useMutation } from "@tanstack/react-query";
 
 export function Dashboard() {
   const [signer] = useState<AlchemySigner | undefined>(() => {
@@ -31,8 +34,13 @@ export function Dashboard() {
     });
   });
 
-  // const { user, account } = useAuthenticateUser(signer);
-  // console.log({ user, account });
+  const { user, account, isLoadingUser } = useAuthenticateUser(signer);
+
+  console.log("INDEX", {
+    user,
+    account,
+    isLoadingUser,
+  });
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -52,7 +60,7 @@ export function Dashboard() {
             <SideNav />
           </div>
           <div className="mt-auto p-4">
-            <FaucetCard />
+            <FaucetCard signer={signer} />
           </div>
         </div>
       </div>
@@ -60,11 +68,7 @@ export function Dashboard() {
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
+              <Button variant="outline" size="icon" className="shrink-0 md:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -72,7 +76,7 @@ export function Dashboard() {
             <SheetContent side="left" className="flex flex-col">
               <SideNav />
               <div className="mt-auto">
-                <FaucetCard />
+                <FaucetCard signer={signer} />
               </div>
             </SheetContent>
           </Sheet>
@@ -83,13 +87,7 @@ export function Dashboard() {
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <MainSectionLayout title="Inventory" centered>
-            <h3 className="text-2xl font-bold tracking-tight">
-              You have no products
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              You can start selling as soon as you add a product.
-            </p>
-            <Button className="mt-4">Add Product</Button>
+            <TestView user={user} account={account} />
           </MainSectionLayout>
         </main>
       </div>
@@ -97,3 +95,99 @@ export function Dashboard() {
     </div>
   );
 }
+
+type TestViewProps = {
+  user: User | undefined;
+  account: MultiOwnerModularAccount | undefined;
+};
+
+const TestView: FC<TestViewProps> = ({ user, account }) => {
+  const [provider, setProvider] = useState<AlchemySmartAccountClient | undefined>();
+
+  useEffect(() => {
+    if (typeof document === "undefined" || !account) {
+      return;
+    }
+
+    const gasManagerPolicyId = process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID;
+
+    if (gasManagerPolicyId == null) {
+      throw new Error("Missing gas policy ID");
+    }
+
+    const newProvider = createAlchemySmartAccountClient({
+      chain: sepolia,
+      rpcUrl: "/api/rpc",
+      account,
+      gasManagerConfig: {
+        policyId: gasManagerPolicyId,
+      },
+      opts: {
+        txMaxRetries: 20,
+      },
+    });
+
+    setProvider(newProvider);
+  }, [account]);
+
+  const sendUO = useCallback(async () => {
+    if (provider == null || account == null) return;
+
+    const vitalik: Address = "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B";
+
+    const { hash } = await provider.sendUserOperation({
+      account,
+      uo: { data: "0x00", target: vitalik, value: BigInt(420) },
+    });
+
+    const txnHash = await provider.waitForUserOperationTransaction({
+      hash,
+    });
+
+    return { uoHash: hash, txnHash };
+  }, [provider, account]);
+
+  const {
+    mutate: sendUserOperation,
+    data,
+    isPending: isPendingUserOperation,
+    isError: isSendUserOperationError,
+  } = useMutation({
+    mutationFn: sendUO,
+    onSettled(data, error, variables, context) {
+      console.log({ data, error, variables, context, provider, account });
+    },
+  });
+
+  if (!user || !account)
+    return (
+      <>
+        <h3 className="text-2xl font-bold tracking-tight">Sign in</h3>
+        <p className="text-sm text-muted-foreground">You can start selling as soon as you add a product.</p>
+        <Button className="mt-4">Add Product</Button>
+      </>
+    );
+
+  return (
+    <>
+      <div>
+        <div>Account Address</div>
+        {provider?.account?.address}
+      </div>
+
+      <Button variant="secondary" className="w-full" onClick={() => sendUserOperation()}>
+        Send User Operation
+      </Button>
+      {isPendingUserOperation && <div>Sending...</div>}
+      {isSendUserOperationError && <div>Error sending user operation</div>}
+      {data && (
+        <div>
+          <div>UO Hash</div>
+          {data.uoHash}
+          <div>TX Hash</div>
+          {data.txnHash}
+        </div>
+      )}
+    </>
+  );
+};
