@@ -7,9 +7,11 @@ import { useCallback, useState } from "react";
 import { sepolia } from "viem/chains";
 import { Address } from "viem";
 import { useMutation } from "@tanstack/react-query";
+import { useAccount } from "../providers/account-context";
 
-export function FaucetCard({ signer }: { signer: AlchemySigner | undefined }) {
-  const { account } = useAuthenticateUser(signer);
+export function FaucetCard() {
+  const { signer } = useAccount();
+  const { account } = useAuthenticateUser();
 
   const [provider] = useState(() => {
     if (typeof document === "undefined") {

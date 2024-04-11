@@ -12,35 +12,14 @@ import { MainSectionLayout } from "./MainSectionLayout";
 import { FaucetCard } from "./FaucetCard";
 import { TurnkeyIframe } from "./TurnkeyIframe";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { AlchemySigner, AlchemySmartAccountClient, User, createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
+import { AlchemySmartAccountClient, User, createAlchemySmartAccountClient } from "@alchemy/aa-alchemy";
 import { FC, useCallback, useEffect, useState } from "react";
 import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { Address, sepolia } from "@alchemy/aa-core";
 import { useMutation } from "@tanstack/react-query";
 
 export function Dashboard() {
-  const [signer] = useState<AlchemySigner | undefined>(() => {
-    if (typeof window === "undefined") return undefined;
-
-    return new AlchemySigner({
-      client: {
-        connection: {
-          rpcUrl: "/api/rpc",
-        },
-        iframeConfig: {
-          iframeContainerId: "turnkey-iframe-container-id",
-        },
-      },
-    });
-  });
-
-  const { user, account, isLoadingUser } = useAuthenticateUser(signer);
-
-  console.log("INDEX", {
-    user,
-    account,
-    isLoadingUser,
-  });
+  const { user, account } = useAuthenticateUser();
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -60,7 +39,7 @@ export function Dashboard() {
             <SideNav />
           </div>
           <div className="mt-auto p-4">
-            <FaucetCard signer={signer} />
+            <FaucetCard />
           </div>
         </div>
       </div>
@@ -76,14 +55,14 @@ export function Dashboard() {
             <SheetContent side="left" className="flex flex-col">
               <SideNav />
               <div className="mt-auto">
-                <FaucetCard signer={signer} />
+                <FaucetCard />
               </div>
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
             <SearchInput />
           </div>
-          <AccountDropdown signer={signer} />
+          <AccountDropdown />
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <MainSectionLayout title="Inventory" centered>

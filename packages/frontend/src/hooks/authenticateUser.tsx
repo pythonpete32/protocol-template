@@ -1,12 +1,13 @@
+import { useAccount } from "@/components/providers/account-context";
 import { createMultiOwnerModularAccount } from "@alchemy/aa-accounts";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
 import { sepolia, createBundlerClient } from "@alchemy/aa-core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { custom, http } from "viem";
 
-export const useAuthenticateUser = (signer: AlchemySigner | undefined) => {
+export const useAuthenticateUser = () => {
+  const { signer } = useAccount();
   const params = useSearchParams();
   const router = useRouter();
 

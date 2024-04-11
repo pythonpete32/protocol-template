@@ -11,12 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ConnectButton } from "./ConnectButton";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
 
-export function AccountDropdown({ signer }: { signer: AlchemySigner | undefined }) {
-  const { account } = useAuthenticateUser(signer);
+export function AccountDropdown() {
+  const { account } = useAuthenticateUser();
 
-  if (!account) return <ConnectButton signer={signer} />;
+  if (!account) return <ConnectButton />;
 
   return (
     <DropdownMenu>

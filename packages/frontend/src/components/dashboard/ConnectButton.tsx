@@ -7,15 +7,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { AlchemySigner } from "@alchemy/aa-alchemy";
 
 type ConnectButtonType = {
   className?: string;
-  signer: AlchemySigner | undefined;
 };
 
-export const ConnectButton: FC<ConnectButtonType> = ({ className, signer }) => {
-  const { isLoadingUser, isAuthenticatingUser } = useAuthenticateUser(signer);
+export const ConnectButton: FC<ConnectButtonType> = ({ className }) => {
+  const { isLoadingUser, isAuthenticatingUser } = useAuthenticateUser();
 
   const isLoading = isLoadingUser || isAuthenticatingUser;
 
@@ -24,21 +22,21 @@ export const ConnectButton: FC<ConnectButtonType> = ({ className, signer }) => {
       <DialogTrigger asChild>
         <Button size="sm" className={className} disabled={isLoading} data-testid="exampleChild">
           {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-          Signup or Login
+          {isLoading ? "Signing in..." : "Signup or Login"}
         </Button>
       </DialogTrigger>
       <DialogContentInvisible>
-        <LoginForm signer={signer} />
+        <LoginForm />
       </DialogContentInvisible>
     </Dialog>
   );
 };
 
-export function LoginForm({ signer }: { signer: AlchemySigner | undefined }) {
+export function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const onEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), []);
 
-  const { isAuthenticatingUser, authenticateUser } = useAuthenticateUser(signer);
+  const { isAuthenticatingUser, authenticateUser } = useAuthenticateUser();
 
   return (
     <>
