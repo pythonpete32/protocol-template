@@ -10,43 +10,18 @@ import { useMutation } from "@tanstack/react-query";
 import { useAccount } from "../providers/account-context";
 
 export function FaucetCard() {
-  const { signer } = useAccount();
-  const { account } = useAuthenticateUser();
-
-  const [provider] = useState(() => {
-    if (typeof document === "undefined") {
-      return undefined;
-    }
-
-    const gasManagerPolicyId = process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID;
-
-    if (gasManagerPolicyId == null) {
-      throw new Error("Missing gas policy ID");
-    }
-
-    return createAlchemySmartAccountClient({
-      chain: sepolia,
-      rpcUrl: "/api/rpc",
-      account,
-      gasManagerConfig: {
-        policyId: gasManagerPolicyId,
-      },
-      opts: {
-        txMaxRetries: 20,
-      },
-    });
-  });
-
-  console.log({ signer, account, provider });
+  const { signer, account, provider } = useAccount();
+  // const { account } = useAuthenticateUser();
 
   const sendUO = useCallback(async () => {
     if (provider == null) return;
 
-    console.log({ provider });
+    // console.log({ provider });
 
     const vitalik: Address = "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B";
 
     const { hash } = await provider.sendUserOperation({
+      // account,
       uo: {
         target: vitalik,
         data: "0x",
@@ -72,7 +47,7 @@ export function FaucetCard() {
     },
   });
 
-  // console.log({ sendUO, data, isPendingUserOperation, isSendUserOperationError });
+  console.log({ data, isPendingUserOperation, isSendUserOperationError });
 
   return (
     <Card>

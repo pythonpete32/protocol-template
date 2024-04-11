@@ -6,14 +6,14 @@ import { Dialog, DialogContentInvisible, DialogTrigger } from "../ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuthenticateUser } from "@/hooks/authenticateUser";
+import { useAccount } from "../providers/account-context";
 
 type ConnectButtonType = {
   className?: string;
 };
 
 export const ConnectButton: FC<ConnectButtonType> = ({ className }) => {
-  const { isLoadingUser, isAuthenticatingUser } = useAuthenticateUser();
+  const { isLoadingUser, isAuthenticatingUser } = useAccount();
 
   const isLoading = isLoadingUser || isAuthenticatingUser;
 
@@ -36,7 +36,7 @@ export function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const onEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), []);
 
-  const { isAuthenticatingUser, authenticateUser } = useAuthenticateUser();
+  const { isAuthenticatingUser, authenticateUser } = useAccount();
 
   return (
     <>

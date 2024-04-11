@@ -17,9 +17,11 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
 import { Address, sepolia } from "@alchemy/aa-core";
 import { useMutation } from "@tanstack/react-query";
+import { useAccount } from "../providers/account-context";
 
 export function Dashboard() {
-  const { user, account } = useAuthenticateUser();
+  const { user, account } = useAccount();
+  // const { user, account } = useAuthenticateUser();
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -81,33 +83,7 @@ type TestViewProps = {
 };
 
 const TestView: FC<TestViewProps> = ({ user, account }) => {
-  const [provider, setProvider] = useState<AlchemySmartAccountClient | undefined>();
-
-  useEffect(() => {
-    if (typeof document === "undefined" || !account) {
-      return;
-    }
-
-    const gasManagerPolicyId = process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID;
-
-    if (gasManagerPolicyId == null) {
-      throw new Error("Missing gas policy ID");
-    }
-
-    const newProvider = createAlchemySmartAccountClient({
-      chain: sepolia,
-      rpcUrl: "/api/rpc",
-      account,
-      gasManagerConfig: {
-        policyId: gasManagerPolicyId,
-      },
-      opts: {
-        txMaxRetries: 20,
-      },
-    });
-
-    setProvider(newProvider);
-  }, [account]);
+  const { provider } = useAccount();
 
   const sendUO = useCallback(async () => {
     if (provider == null || account == null) return;
@@ -115,7 +91,7 @@ const TestView: FC<TestViewProps> = ({ user, account }) => {
     const vitalik: Address = "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B";
 
     const { hash } = await provider.sendUserOperation({
-      account,
+      // account,
       uo: { data: "0x00", target: vitalik, value: BigInt(420) },
     });
 
