@@ -2,11 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { FC, useCallback, useState } from "react";
-import { Dialog, DialogContentInvisible, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContentInvisible, DialogTrigger } from "../../components/ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAccount } from "../providers/account-context";
+import { useAccount } from "../../providers/account-context";
 
 type ConnectButtonType = {
   className?: string;
