@@ -4,6 +4,7 @@ import { FC, useCallback } from "react";
 import { Address } from "@alchemy/aa-core";
 import { useMutation } from "@tanstack/react-query";
 import { useAccount } from "../providers/account-context";
+import { toast } from "sonner";
 
 export const TestView: FC = () => {
   const { user, account, provider } = useAccount();
@@ -41,7 +42,9 @@ export const TestView: FC = () => {
       <>
         <h3 className="text-2xl font-bold tracking-tight">Sign in</h3>
         <p className="text-sm text-muted-foreground">You can start selling as soon as you add a product.</p>
-        <Button className="mt-4">Add Product</Button>
+        <Button className="mt-4" onClick={() => toast("Event has been created.")}>
+          Add Product
+        </Button>
       </>
     );
 
