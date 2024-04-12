@@ -9,14 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { ConnectButton } from "./ConnectButton";
+import { useAuthenticateUser } from "@/hooks/authenticateUser";
 
 export function AccountDropdown() {
-  const isLoggedIn = useIsLoggedIn();
-  const { handleLogOut } = useDynamicContext();
+  const { account } = useAuthenticateUser();
 
-  if (!isLoggedIn) return <ConnectButton />;
+  if (!account) return <ConnectButton />;
 
   return (
     <DropdownMenu>
@@ -31,9 +30,7 @@ export function AccountDropdown() {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleLogOut()}>
-          Logout
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => console.log("logout")}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
