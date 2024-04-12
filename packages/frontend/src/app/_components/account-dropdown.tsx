@@ -1,4 +1,5 @@
 "use client";
+
 import { CircleUser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,10 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ConnectButton } from "./ConnectButton";
-import { useAuthenticateUser } from "@/hooks/authenticateUser";
+import { useAccount } from "@/providers/account-context";
 
 export function AccountDropdown() {
-  const { account } = useAuthenticateUser();
+  const { account } = useAccount();
 
   if (!account) return <ConnectButton />;
 

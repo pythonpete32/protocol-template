@@ -1,4 +1,5 @@
 import { Activity, BookDown, CandlestickChart, Home } from "lucide-react";
+
 export type MenuItem = {
   href: string;
   icon: React.ElementType;
@@ -7,8 +8,8 @@ export type MenuItem = {
 };
 
 export const menuItems: MenuItem[] = [
-  { href: "#", icon: Home, label: "Dashboard" },
-  { href: "#", icon: CandlestickChart, label: "Portfolio" },
-  { href: "#", icon: BookDown, label: "Depositors" },
-  { href: "#", icon: Activity, label: "Activity" },
+  { href: "/", icon: Home, label: "Dashboard" },
+  { href: "/portfolio", icon: CandlestickChart, label: "Portfolio" },
+  { href: "/depositors", icon: BookDown, label: "Depositors" },
+  { href: "/activity", icon: Activity, label: "Activity" },
 ];

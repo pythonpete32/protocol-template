@@ -3,7 +3,7 @@ import { TestView } from "@/components/TestView";
 
 export default function Home() {
   return (
-    <MainSectionLayout title="DashBoard" centered>
+    <MainSectionLayout title="Activity" centered>
       <TestView />
     </MainSectionLayout>
   );

@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 import { Address } from "viem";
 import { useMutation } from "@tanstack/react-query";
-import { useAccount } from "../components/providers/account-context";
+import { useAccount } from "../providers/account-context";
 
 export const useExampleUserOp = () => {
   const { provider } = useAccount();
