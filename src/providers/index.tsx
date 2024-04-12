@@ -12,10 +12,12 @@ export const Providers = (props: PropsWithChildren) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
       <QueryClientProvider client={queryClient}>
-        <AccountProvider>
-          <Suspense>{props.children}</Suspense>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </AccountProvider>
+        <Suspense>
+          <AccountProvider>
+            {props.children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </AccountProvider>
+        </Suspense>
       </QueryClientProvider>
     </ThemeProvider>
   );
