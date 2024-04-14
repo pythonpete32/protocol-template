@@ -1,16 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { createKernelAccount, createKernelAccountClient, createZeroDevPaymasterClient } from "@zerodev/sdk";
-import { ENTRYPOINT_ADDRESS_V07 } from "permissionless";
-import { createPublicClient, http } from "viem";
-import { CHAIN, BUNDLER_URL, PAYMASTER_URL, entryPoint, PASSKEY_SERVER_URL } from "../config/settings";
+import { createKernelAccount } from "@zerodev/sdk";
+import { entryPoint, PASSKEY_SERVER_URL } from "../config/settings";
 import { createPasskeyValidator } from "@zerodev/passkey-validator";
+import { useZeroDevContext } from "@/providers/account-context";
 
 export const useCreateAccount = () => {
-  const publicClient = createPublicClient({
-    transport: http(BUNDLER_URL),
-  });
+  const { publicClient, setKernelAccount } = useZeroDevContext();
 
   const mutationFn = async (userName: string) => {
+    if (!publicClient) throw new Error("Public client not found");
+
     const passkeyValidator = await createPasskeyValidator(publicClient, {
       passkeyName: userName,
       passkeyServerUrl: PASSKEY_SERVER_URL,
@@ -19,9 +18,7 @@ export const useCreateAccount = () => {
 
     return createKernelAccount(publicClient, {
       entryPoint,
-      plugins: {
-        sudo: passkeyValidator,
-      },
+      plugins: { sudo: passkeyValidator },
     });
   };
 
@@ -30,29 +27,8 @@ export const useCreateAccount = () => {
     mutate: createAccount,
     mutateAsync: createAccountAsync,
     ...rest
-  } = useMutation({ mutationFn });
+  } = useMutation({ mutationFn, onSuccess: (data) => setKernelAccount(data) });
+  rest.status;
 
-  const kernelClient = kernelAccount
-    ? createKernelAccountClient({
-        account: kernelAccount,
-        chain: CHAIN,
-        bundlerTransport: http(BUNDLER_URL),
-        entryPoint: ENTRYPOINT_ADDRESS_V07,
-        middleware: {
-          sponsorUserOperation: async ({ userOperation }) => {
-            const zeroDevPaymaster = await createZeroDevPaymasterClient({
-              chain: CHAIN,
-              transport: http(PAYMASTER_URL),
-              entryPoint,
-            });
-            return zeroDevPaymaster.sponsorUserOperation({
-              userOperation,
-              entryPoint,
-            });
-          },
-        },
-      })
-    : undefined;
-
-  return { kernelAccount, kernelClient, createAccount, createAccountAsync, ...rest };
+  return { kernelAccount, createAccount, createAccountAsync, ...rest };
 };
