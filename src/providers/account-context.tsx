@@ -9,6 +9,8 @@ import {
 } from "@zerodev/sdk";
 import type { ENTRYPOINT_ADDRESS_V07_TYPE } from "permissionless/types";
 import { BUNDLER_URL, CHAIN, PAYMASTER_URL, entryPoint } from "@/config/settings";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // TODO: fix this type
 type KernelClient = KernelAccountClient<any> | any;
@@ -19,6 +21,7 @@ interface AccountContextValue {
   kernelClient: KernelClient | undefined;
   publicClient: PublicClient | undefined;
   setKernelAccount: React.Dispatch<React.SetStateAction<KernelAccount | undefined>>;
+  logout: () => void;
 }
 
 export const AccountContext = createContext<AccountContextValue>({
@@ -26,12 +29,22 @@ export const AccountContext = createContext<AccountContextValue>({
   kernelClient: undefined,
   publicClient: undefined,
   setKernelAccount: () => {},
+  logout: () => {},
 });
 
 export function AccountProvider({ children }: { children: React.ReactNode }) {
   const [kernelAccount, setKernelAccount] = useState<KernelAccount | undefined>(undefined);
   const [kernelClient, setKernelClient] = useState<KernelClient | undefined>(undefined);
   const [publicClient, setPublicClient] = useState<PublicClient | undefined>(undefined);
+  const router = useRouter();
+
+  const logout = () => {
+    setKernelAccount(undefined);
+    setKernelAccount(undefined);
+    setPublicClient(undefined);
+    toast("Logging out...");
+    router.push("/login");
+  };
 
   // setPublicClient,
   useEffect(() => {
@@ -73,6 +86,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
         kernelClient,
         publicClient,
         setKernelAccount,
+        logout,
       }}
     >
       {children}

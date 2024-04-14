@@ -6,23 +6,24 @@ import { Dialog, DialogContentInvisible, DialogTrigger } from "../../../componen
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAccount } from "../../../providers/account-context";
+import { useZeroDevContext } from "@/providers/account-context";
 
 type ConnectButtonType = {
   className?: string;
 };
 
 export const ConnectButton: FC<ConnectButtonType> = ({ className }) => {
-  const { isLoadingUser, isAuthenticatingUser } = useAccount();
+  // const { isLoadingUser, isAuthenticatingUser } = useZeroDevContext();
 
-  const isLoading = isLoadingUser || isAuthenticatingUser;
+  // const isLoading = isLoadingUser || isAuthenticatingUser;
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className={className} disabled={isLoading} data-testid="exampleChild">
-          {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-          {isLoading ? "Signing in..." : "Signup or Login"}
+        <Button size="sm" className={className} data-testid="exampleChild">
+          {/* disabled={isLoading} */}
+          {/* {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+          {isLoading ? "Signing in..." : "Signup or Login"} */}
         </Button>
       </DialogTrigger>
       <DialogContentInvisible>
