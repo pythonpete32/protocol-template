@@ -50,6 +50,15 @@ dependencies:
   '@tanstack/react-query-devtools':
     specifier: ^5.29.0
     version: 5.29.2(@tanstack/react-query@5.29.2)(react@18.2.0)
+  '@zerodev/ecdsa-validator':
+    specifier: ^5.2.0
+    version: 5.2.0(@zerodev/sdk@5.2.0)(permissionless@0.1.16)(viem@2.9.16)
+  '@zerodev/passkey-validator':
+    specifier: ^5.2.0
+    version: 5.2.0(@zerodev/sdk@5.2.0)(permissionless@0.1.16)(viem@2.9.16)
+  '@zerodev/sdk':
+    specifier: ^5.2.0
+    version: 5.2.0(permissionless@0.1.16)(viem@2.9.16)
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -71,6 +80,9 @@ dependencies:
   next-themes:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.2.0)(react@18.2.0)
+  permissionless:
+    specifier: ^0.1.16
+    version: 0.1.16(viem@2.9.16)
   react:
     specifier: ^18
     version: 18.2.0
@@ -98,7 +110,7 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: ^20.12.6
+    specifier: ^20.12.7
     version: 20.12.7
   '@types/react':
     specifier: ^18.2.75
@@ -124,6 +136,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.3.0
     version: 3.4.3
+  tslib:
+    specifier: ^2.6.2
+    version: 2.6.2
   typescript:
     specifier: ^5.4.4
     version: 5.4.5
@@ -4490,6 +4505,17 @@ packages:
     resolution: {integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==}
     dev: false
 
+  /@simplewebauthn/browser@8.3.7:
+    resolution: {integrity: sha512-ZtRf+pUEgOCvjrYsbMsJfiHOdKcrSZt2zrAnIIpfmA06r0FxBovFYq0rJ171soZbe13KmWzAoLKjSxVW7KxCdQ==}
+    dependencies:
+      '@simplewebauthn/typescript-types': 8.3.4
+    dev: false
+
+  /@simplewebauthn/typescript-types@8.3.4:
+    resolution: {integrity: sha512-38xtca0OqfRVNloKBrFB5LEM6PN5vzFbJG6rAutPVrtGHFYxPdiV3btYWq0eAZAZmP+dqFPYJxJWeJrGfmYHng==}
+    deprecated: This package has been renamed to @simplewebauthn/types. Please install @simplewebauthn/types instead to ensure you receive future updates.
+    dev: false
+
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
     dev: false
@@ -5694,6 +5720,43 @@ packages:
     dependencies:
       '@walletconnect/window-getters': 1.0.1
       tslib: 1.14.1
+    dev: false
+
+  /@zerodev/ecdsa-validator@5.2.0(@zerodev/sdk@5.2.0)(permissionless@0.1.16)(viem@2.9.16):
+    resolution: {integrity: sha512-yFsPYY2AhowxMJ/iKj3Wp8eFASx3IU46wMEO1+tbQfwjFsXoKdSwcPVwIYH0PIhFx1rGwfCA8NDvIlo6MsylgA==}
+    peerDependencies:
+      '@zerodev/sdk': ^5.2.0
+      permissionless: ^0.1.16
+      viem: ^2.0.0
+    dependencies:
+      '@zerodev/sdk': 5.2.0(permissionless@0.1.16)(viem@2.9.16)
+      permissionless: 0.1.16(viem@2.9.16)
+      viem: 2.9.16(typescript@5.4.5)
+    dev: false
+
+  /@zerodev/passkey-validator@5.2.0(@zerodev/sdk@5.2.0)(permissionless@0.1.16)(viem@2.9.16):
+    resolution: {integrity: sha512-G9H8gxWaH8dC4TyaYmVlGTNACxaBpQlc5qV74Q+qcOJ8vpqaBKeCCTza4I6Y9rfqhAy0ZxIaLXsPwuUlooawvw==}
+    peerDependencies:
+      '@zerodev/sdk': ^5.2.0
+      permissionless: ^0.1.16
+      viem: ^2.0.0
+    dependencies:
+      '@noble/curves': 1.4.0
+      '@simplewebauthn/browser': 8.3.7
+      '@zerodev/sdk': 5.2.0(permissionless@0.1.16)(viem@2.9.16)
+      permissionless: 0.1.16(viem@2.9.16)
+      viem: 2.9.16(typescript@5.4.5)
+    dev: false
+
+  /@zerodev/sdk@5.2.0(permissionless@0.1.16)(viem@2.9.16):
+    resolution: {integrity: sha512-bNrcIeMCwW/oifFa9ycLBPHbcP9vlfdlGJbsHiWWN7hw+Z2JAny2dT4BZ03iztWQYlSrbxA+lkcsWYUJocN3Kg==}
+    peerDependencies:
+      permissionless: ^0.1.16
+      viem: ^2.0.0
+    dependencies:
+      permissionless: 0.1.16(viem@2.9.16)
+      semver: 7.6.0
+      viem: 2.9.16(typescript@5.4.5)
     dev: false
 
   /JSONStream@1.3.5:
@@ -10081,6 +10144,14 @@ packages:
     resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
     dev: false
 
+  /permissionless@0.1.16(viem@2.9.16):
+    resolution: {integrity: sha512-UGC3yJiGYcPHJ+LohSFJSIxQGIQ2DMREYXGwVtb0DdvTVuO+uqqEymD6LZnKdtLF2KGhBPODv37LqvRyh+ma3g==}
+    peerDependencies:
+      viem: ^2.0.0
+    dependencies:
+      viem: 2.9.16(typescript@5.4.5)
+    dev: false
+
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
 
@@ -11686,7 +11757,6 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
-    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
