@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { createPublicClient, http } from "viem";
-import type { Chain, PublicClient, Transport } from "viem";
+import type { Chain, Client, PublicClient, Transport } from "viem";
 import {
   createKernelAccountClient,
   createZeroDevPaymasterClient,
@@ -8,6 +8,7 @@ import {
   type KernelSmartAccount,
 } from "@zerodev/sdk";
 import type { ENTRYPOINT_ADDRESS_V07_TYPE } from "permissionless/types";
+import { bundlerActions } from "permissionless";
 import { BUNDLER_URL, CHAIN, PAYMASTER_URL, entryPoint } from "@/config/settings";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,7 @@ type KernelAccount = KernelSmartAccount<ENTRYPOINT_ADDRESS_V07_TYPE, Transport, 
 interface AccountContextValue {
   kernelAccount: KernelAccount | undefined;
   kernelClient: KernelClient | undefined;
+  bundlerClient: Client<any> | any;
   publicClient: PublicClient | undefined;
   setKernelAccount: React.Dispatch<React.SetStateAction<KernelAccount | undefined>>;
   logout: () => void;
@@ -28,6 +30,7 @@ export const AccountContext = createContext<AccountContextValue>({
   kernelAccount: undefined,
   kernelClient: undefined,
   publicClient: undefined,
+  bundlerClient: undefined,
   setKernelAccount: () => {},
   logout: () => {},
 });
@@ -36,6 +39,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   const [kernelAccount, setKernelAccount] = useState<KernelAccount | undefined>(undefined);
   const [kernelClient, setKernelClient] = useState<KernelClient | undefined>(undefined);
   const [publicClient, setPublicClient] = useState<PublicClient | undefined>(undefined);
+  const [bundlerClient, setBundlerClient] = useState<Client<Transport> | undefined>(undefined);
   const router = useRouter();
 
   const logout = () => {
@@ -55,7 +59,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
     setPublicClient(publicClient);
   }, []);
 
-  // setKernelClient,
+  // setKernel & Bundler Clients,
   useEffect(() => {
     const kernelClient = createKernelAccountClient({
       account: kernelAccount,
@@ -76,6 +80,9 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
         },
       },
     });
+    const bundlerClient = kernelClient.extend(bundlerActions(entryPoint));
+
+    setBundlerClient(bundlerClient);
     setKernelClient(kernelClient);
   }, [kernelAccount]);
 
@@ -86,6 +93,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
         kernelClient,
         publicClient,
         setKernelAccount,
+        bundlerClient,
         logout,
       }}
     >

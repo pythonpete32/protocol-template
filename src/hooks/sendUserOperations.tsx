@@ -11,7 +11,6 @@ export type UseSendUserOperationsType = Array<{
 export const useSendUserOperations = () => {
   const { kernelClient } = useZeroDevContext();
   const mutationFn = async (operations: UseSendUserOperationsType) => {
-    console.log(operations);
     return kernelClient.sendUserOperation({
       userOperation: {
         callData: await kernelClient.account.encodeCallData(operations),
