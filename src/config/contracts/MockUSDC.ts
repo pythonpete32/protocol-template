@@ -1,5 +1,7 @@
+import { Address } from "viem";
+
 const MockUSDC = {
-  address: { 11155111: "0x8e42Df877291dDD168f921f075DdA563cb245D5a" },
+  address: "0x8e42Df877291dDD168f921f075DdA563cb245D5a" as Address,
   abi: [
     {
       inputs: [],
@@ -629,7 +631,7 @@ const MockUSDC = {
       stateMutability: "nonpayable",
       type: "function",
     },
-  ],
+  ] as const,
 };
 
 export const MockUSDCConfig = typeof MockUSDC;
