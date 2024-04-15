@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers";
-import { AppShell } from "./_components/AppShell";
+import { TurnkeyIframe } from "./(dashboard)/_components/TurnkeyIframe";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,7 +19,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <AppShell>{children}</AppShell>
+          {children}
+          <TurnkeyIframe />
         </Providers>
       </body>
     </html>

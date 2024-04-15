@@ -2,10 +2,8 @@
 
 import { FC, PropsWithChildren } from "react";
 import { AccountDropdown } from "./account-dropdown";
-import { SearchInput } from "./SearchInput";
 import { SideNav } from "./SideNav";
 import { FaucetCard } from "./FaucetCard";
-import { TurnkeyIframe } from "./TurnkeyIframe";
 import { SidebarSheetButton } from "./SidebarSheetButton";
 import { NotificationButton } from "./NotificationButton";
 import { Logo } from "./Logo";
@@ -35,14 +33,11 @@ export const AppShell: FC<PropsWithChildren> = ({ children }) => {
               <FaucetCard />
             </div>
           </SidebarSheetButton>
-          <div className="w-full flex-1">
-            <SearchInput />
-          </div>
+          <div className="w-full flex-1" />
           <AccountDropdown />
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">{children}</main>
       </div>
-      <TurnkeyIframe />
     </div>
   );
 };

@@ -8,7 +8,7 @@ export type MenuItem = {
 };
 
 export const menuItems: MenuItem[] = [
-  { href: "/", icon: Home, label: "Dashboard" },
+  { href: "/dashboard", icon: Home, label: "Dashboard" },
   { href: "/portfolio", icon: CandlestickChart, label: "Portfolio" },
   { href: "/depositors", icon: BookDown, label: "Depositors" },
   { href: "/activity", icon: Activity, label: "Activity" },

@@ -1,107 +1,100 @@
-// account-context.tsx
-import { useAuthenticateUser } from "@/hooks/authenticateUser";
-import { MultiOwnerModularAccount } from "@alchemy/aa-accounts";
-import {
-  AlchemySigner,
-  AlchemySmartAccountClient,
-  AuthParams,
-  User,
-  createAlchemySmartAccountClient,
-} from "@alchemy/aa-alchemy";
-import { sepolia } from "@alchemy/aa-core";
-import { UseMutateFunction } from "@tanstack/react-query";
 import { createContext, useEffect, useState, useContext } from "react";
-import { Chain, Transport } from "viem";
+import { createPublicClient, http } from "viem";
+import type { Chain, Client, PublicClient, Transport } from "viem";
+import {
+  createKernelAccountClient,
+  createZeroDevPaymasterClient,
+  type KernelAccountClient,
+  type KernelSmartAccount,
+} from "@zerodev/sdk";
+import type { ENTRYPOINT_ADDRESS_V07_TYPE } from "permissionless/types";
+import { bundlerActions } from "permissionless";
+import { BUNDLER_URL, CHAIN, PAYMASTER_URL, entryPoint } from "@/config/settings";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-type MultiOwnerSmartAccountClient = AlchemySmartAccountClient<
-  Transport,
-  Chain,
-  MultiOwnerModularAccount<AlchemySigner>
->;
+// TODO: fix this type
+type KernelClient = KernelAccountClient<any> | any;
+type KernelAccount = KernelSmartAccount<ENTRYPOINT_ADDRESS_V07_TYPE, Transport, Chain | undefined>;
 
 interface AccountContextValue {
-  signer: AlchemySigner | undefined;
-  user: User | undefined;
-  account: MultiOwnerModularAccount<AlchemySigner> | undefined;
-  isLoadingUser: boolean;
-  refetchUserDetails: () => void;
-  isAuthenticatingUser: boolean;
-  authenticateUser: UseMutateFunction<User, Error, AuthParams, unknown>;
-  provider: MultiOwnerSmartAccountClient | undefined;
+  kernelAccount: KernelAccount | undefined;
+  kernelClient: KernelClient | undefined;
+  bundlerClient: Client<any> | any;
+  publicClient: PublicClient | undefined;
+  setKernelAccount: React.Dispatch<React.SetStateAction<KernelAccount | undefined>>;
+  logout: () => void;
 }
 
 export const AccountContext = createContext<AccountContextValue>({
-  signer: undefined,
-  user: undefined,
-  account: undefined,
-  provider: undefined,
-  isLoadingUser: false,
-  refetchUserDetails: () => {},
-  isAuthenticatingUser: false,
-  authenticateUser: () => {},
+  kernelAccount: undefined,
+  kernelClient: undefined,
+  publicClient: undefined,
+  bundlerClient: undefined,
+  setKernelAccount: () => {},
+  logout: () => {},
 });
 
 export function AccountProvider({ children }: { children: React.ReactNode }) {
-  const [signer, setSigner] = useState<AlchemySigner | undefined>(undefined);
-  const [provider, setProvider] = useState<MultiOwnerSmartAccountClient | undefined>();
+  const [kernelAccount, setKernelAccount] = useState<KernelAccount | undefined>(undefined);
+  const [kernelClient, setKernelClient] = useState<KernelClient | undefined>(undefined);
+  const [publicClient, setPublicClient] = useState<PublicClient | undefined>(undefined);
+  const [bundlerClient, setBundlerClient] = useState<Client<Transport> | undefined>(undefined);
+  const router = useRouter();
 
-  const { user, account, isLoadingUser, refetchUserDetails, isAuthenticatingUser, authenticateUser } =
-    useAuthenticateUser(signer);
+  const logout = () => {
+    setKernelAccount(undefined);
+    setKernelAccount(undefined);
+    setPublicClient(undefined);
+    toast("Logging out...");
+    router.push("/login");
+  };
 
+  // setPublicClient,
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const newSigner = new AlchemySigner({
-      client: {
-        connection: {
-          rpcUrl: "/api/rpc",
-        },
-        iframeConfig: {
-          iframeContainerId: "turnkey-iframe-container-id",
-        },
-      },
+    const publicClient = createPublicClient({
+      transport: http(BUNDLER_URL),
     });
 
-    setSigner(newSigner);
+    setPublicClient(publicClient);
   }, []);
 
+  // setKernel & Bundler Clients,
   useEffect(() => {
-    if (typeof document === "undefined" || !account) {
-      return;
-    }
-
-    const gasManagerPolicyId = process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID;
-
-    if (gasManagerPolicyId == null) {
-      throw new Error("Missing gas policy ID");
-    }
-
-    const newProvider = createAlchemySmartAccountClient({
-      chain: sepolia,
-      rpcUrl: "/api/rpc",
-      account,
-      gasManagerConfig: {
-        policyId: gasManagerPolicyId,
-      },
-      opts: {
-        txMaxRetries: 20,
+    const kernelClient = createKernelAccountClient({
+      account: kernelAccount,
+      chain: CHAIN,
+      bundlerTransport: http(BUNDLER_URL),
+      entryPoint,
+      middleware: {
+        sponsorUserOperation: async ({ userOperation }) => {
+          const zeroDevPaymaster = createZeroDevPaymasterClient({
+            chain: CHAIN,
+            transport: http(PAYMASTER_URL),
+            entryPoint,
+          });
+          return zeroDevPaymaster.sponsorUserOperation({
+            userOperation,
+            entryPoint,
+          });
+        },
       },
     });
+    const bundlerClient = kernelClient.extend(bundlerActions(entryPoint));
 
-    setProvider(newProvider);
-  }, [account]);
+    setBundlerClient(bundlerClient);
+    setKernelClient(kernelClient);
+  }, [kernelAccount]);
 
   return (
     <AccountContext.Provider
       value={{
-        signer,
-        user,
-        account,
-        provider,
-        isLoadingUser,
-        refetchUserDetails,
-        isAuthenticatingUser,
-        authenticateUser,
+        kernelAccount,
+        kernelClient,
+        publicClient,
+        setKernelAccount,
+        bundlerClient,
+        logout,
       }}
     >
       {children}
@@ -109,7 +102,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useAccount(): AccountContextValue {
+export function useZeroDevContext(): AccountContextValue {
   const context = useContext(AccountContext);
   if (!context) {
     throw new Error("useAccount must be used within an AccountProvider");
