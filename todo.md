@@ -11,9 +11,11 @@
 
 - [x] Group routes for app (dashboard) 
 
-
 ## 14/4/24
 - [x] create a signin page
 - [x] add support for session keys
 - [x] switchout Alchemy for ZeroDev
+
+## 15/4/24
+- [ ] add signin button if not connected
 - [ ] add notifications for transactions

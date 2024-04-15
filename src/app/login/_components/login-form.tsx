@@ -19,7 +19,6 @@ export function LoginForm() {
   const createAccount = useCreateAccount();
   const loginAccount = useLoginAccount();
 
-  // Function to be called when "Register" is clicked
   const handleRegister = () => {
     toast.promise(createAccount.createAccountAsync(username, { onSuccess: () => router.push("/dashboard") }), {
       loading: "Registering...",
@@ -37,13 +36,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-4 md:p-8">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">Welcome to Protocol</h2>
-      <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Protocol Smart Accounts are secured with Passkeys. Passkeys are a passwordless authentication method that
-        provides a more secure and convenient alternative to traditional passwords or seed phrases
-      </p>
-
+    <>
       <LabelInputContainer className="mb-4 mt-6">
         <Label htmlFor="username">Username For your PassKey</Label>
         <Input id="username" placeholder="username" type="text" onChange={(e) => setUsername(e.target.value)} />
@@ -82,7 +75,7 @@ export function LoginForm() {
           <BottomGradient />
         </button>
       </div>
-    </div>
+    </>
   );
 }
 

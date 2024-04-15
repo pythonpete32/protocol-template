@@ -3,7 +3,6 @@ import { useZeroDevContext } from "@/providers/account-context";
 import { UserOperationsType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Address } from "viem";
 
 export const useSendUserOperations = () => {
   const { kernelClient, bundlerClient } = useZeroDevContext();
