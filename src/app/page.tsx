@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 import Link from "next/link";
 
-export function Home() {
+export default function Home() {
   const words = [
     {
       text: "Build",
@@ -38,5 +38,3 @@ export function Home() {
     </div>
   );
 }
-
-export default Home;
