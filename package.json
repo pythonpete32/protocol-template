@@ -24,6 +24,8 @@
     "@tabler/icons-react": "^3.2.0",
     "@tanstack/react-query": "^5.29.0",
     "@tanstack/react-query-devtools": "^5.29.0",
+    "@wagmi/connectors": "^4.1.25",
+    "@wagmi/core": "^2.6.16",
     "@zerodev/ecdsa-validator": "^5.2.0",
     "@zerodev/passkey-validator": "^5.2.0",
     "@zerodev/sdk": "^5.2.0",
@@ -41,7 +43,7 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.163.0",
-    "viem": "^2.9.9",
+    "viem": "^2.9.16",
     "wagmi": "^2.5.7"
   },
   "devDependencies": {

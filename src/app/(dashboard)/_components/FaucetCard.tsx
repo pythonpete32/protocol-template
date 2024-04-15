@@ -11,6 +11,7 @@ import { useZeroDevContext } from "@/providers/account-context";
 export function FaucetCard() {
   const { sendUserOperation, isPending } = useSendUserOperations();
   const { kernelAccount } = useZeroDevContext();
+  console.log(kernelAccount);
 
   const transaction: UserOperationsType = [
     {

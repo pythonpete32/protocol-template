@@ -22,7 +22,7 @@ dependencies:
     version: 2.0.0-alpha.10(@types/react@18.2.77)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.9.16)
   '@dynamic-labs/wagmi-connector':
     specifier: 2.0.0-alpha.10
-    version: 2.0.0-alpha.10(@dynamic-labs/rpc-providers@2.0.0-alpha.10)(@dynamic-labs/sdk-react-core@2.0.0-alpha.10)(@dynamic-labs/types@2.0.0-alpha.10)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.10)(@wagmi/core@2.6.4)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.9.16)(wagmi@2.5.19)
+    version: 2.0.0-alpha.10(@dynamic-labs/rpc-providers@2.0.0-alpha.10)(@dynamic-labs/sdk-react-core@2.0.0-alpha.10)(@dynamic-labs/types@2.0.0-alpha.10)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.10)(@wagmi/core@2.6.16)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.9.16)(wagmi@2.5.19)
   '@radix-ui/react-dialog':
     specifier: ^1.0.5
     version: 1.0.5(@types/react-dom@18.2.25)(@types/react@18.2.77)(react-dom@18.2.0)(react@18.2.0)
@@ -50,6 +50,12 @@ dependencies:
   '@tanstack/react-query-devtools':
     specifier: ^5.29.0
     version: 5.29.2(@tanstack/react-query@5.29.2)(react@18.2.0)
+  '@wagmi/connectors':
+    specifier: ^4.1.25
+    version: 4.1.25(@types/react@18.2.77)(@wagmi/core@2.6.16)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16)
+  '@wagmi/core':
+    specifier: ^2.6.16
+    version: 2.6.16(@types/react@18.2.77)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16)
   '@zerodev/ecdsa-validator':
     specifier: ^5.2.0
     version: 5.2.0(@zerodev/sdk@5.2.0)(permissionless@0.1.16)(viem@2.9.16)
@@ -102,7 +108,7 @@ dependencies:
     specifier: ^0.163.0
     version: 0.163.0
   viem:
-    specifier: ^2.9.9
+    specifier: ^2.9.16
     version: 2.9.16(typescript@5.4.5)
   wagmi:
     specifier: ^2.5.7
@@ -1957,7 +1963,7 @@ packages:
       viem: 2.9.16(typescript@5.4.5)
     dev: false
 
-  /@dynamic-labs/wagmi-connector@2.0.0-alpha.10(@dynamic-labs/rpc-providers@2.0.0-alpha.10)(@dynamic-labs/sdk-react-core@2.0.0-alpha.10)(@dynamic-labs/types@2.0.0-alpha.10)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.10)(@wagmi/core@2.6.4)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.9.16)(wagmi@2.5.19):
+  /@dynamic-labs/wagmi-connector@2.0.0-alpha.10(@dynamic-labs/rpc-providers@2.0.0-alpha.10)(@dynamic-labs/sdk-react-core@2.0.0-alpha.10)(@dynamic-labs/types@2.0.0-alpha.10)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.10)(@wagmi/core@2.6.16)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.9.16)(wagmi@2.5.19):
     resolution: {integrity: sha512-SO1mqYRP0BKnqPAIriLywOj2w2r8XFEJkKS5m9qVfe3DVZz9TTwaEhNreFOj8yQiYM/9uNXYzzT4L5K1e46iGQ==}
     peerDependencies:
       '@dynamic-labs/rpc-providers': 2.0.0-alpha.10
@@ -1974,7 +1980,7 @@ packages:
       '@dynamic-labs/sdk-react-core': 2.0.0-alpha.10(@types/react@18.2.77)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.9.16)
       '@dynamic-labs/types': 2.0.0-alpha.10(viem@2.9.16)
       '@dynamic-labs/wallet-connector-core': 2.0.0-alpha.10(@dynamic-labs/logger@2.0.0-alpha.10)(@dynamic-labs/rpc-providers@2.0.0-alpha.10)(@dynamic-labs/types@2.0.0-alpha.10)(@dynamic-labs/utils@2.0.0-alpha.10)(@dynamic-labs/wallet-book@2.0.0-alpha.10)(eventemitter3@5.0.1)
-      '@wagmi/core': 2.6.4(@types/react@18.2.77)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16)
+      '@wagmi/core': 2.6.16(@types/react@18.2.77)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16)
       eventemitter3: 5.0.1
       react: 18.2.0
       viem: 2.9.16(typescript@5.4.5)
@@ -5137,32 +5143,6 @@ packages:
 
   /@wagmi/core@2.6.16(@types/react@18.2.77)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16):
     resolution: {integrity: sha512-95r+2CCf4Yz4CWG7UZMALIcGSUfpr9YbZ2HOqmz6gJEBaW9Cf9xUEZj2MXOHZIP+Ri/3CZJtbBEclDot4enZWA==}
-    peerDependencies:
-      '@tanstack/query-core': '>=5.0.0'
-      typescript: '>=5.0.4'
-      viem: 2.x
-    peerDependenciesMeta:
-      '@tanstack/query-core':
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      eventemitter3: 5.0.1
-      mipd: 0.0.5(typescript@5.4.5)
-      typescript: 5.4.5
-      viem: 2.9.16(typescript@5.4.5)
-      zustand: 4.4.1(@types/react@18.2.77)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - bufferutil
-      - immer
-      - react
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@wagmi/core@2.6.4(@types/react@18.2.77)(react@18.2.0)(typescript@5.4.5)(viem@2.9.16):
-    resolution: {integrity: sha512-+p2vbztAaAOehwr8lh/oS3mzsJBByJssRqIYTpexC75O68HWeHgSixGLJOUFrVUwfn++/vuU5nj0Ye5PnJ3m6g==}
     peerDependencies:
       '@tanstack/query-core': '>=5.0.0'
       typescript: '>=5.0.4'

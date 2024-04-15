@@ -1,7 +1,7 @@
 import { Address } from "viem";
 
 const MockUSDC = {
-  address: "0x8e42Df877291dDD168f921f075DdA563cb245D5a" as Address,
+  address: "0x2C1868A15b26A023FDA31532EBc40550dB08c172" as Address,
   abi: [
     {
       inputs: [],
@@ -367,7 +367,7 @@ const MockUSDC = {
           type: "uint8",
         },
       ],
-      stateMutability: "view",
+      stateMutability: "pure",
       type: "function",
     },
     {
