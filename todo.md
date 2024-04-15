@@ -17,5 +17,6 @@
 - [x] switchout Alchemy for ZeroDev
 
 ## 15/4/24
-- [ ] add signin button if not connected
+- [x] add signin button if not connected
+- [ ] dashboard
 - [ ] add notifications for transactions
